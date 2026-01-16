@@ -1,0 +1,109 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('news');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: any;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const posts = await getCollection('news');
+const allPosts = posts.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
+const currentIndex = allPosts.findIndex((p) => p.slug === post.slug);
+const nextPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+---
+
+<Layout title={`${post.data.title} | Офіс НГА`} description={post.data.description}>
+  <article class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Article Header -->
+    <header class="mb-12">
+      <div class="mb-6 flex flex-wrap gap-2">
+        {
+          post.data.tags &&
+            post.data.tags.map((tag) => (
+              <span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-semibold text-blue-600">
+                {tag}
+              </span>
+            ))
+        }
+      </div>
+      <h1 class="mb-4 text-5xl font-bold text-slate-900">{post.data.title}</h1>
+      <p class="text-xl text-slate-600">{post.data.description}</p>
+      <div class="mt-6 flex items-center gap-4 text-slate-600">
+        <time datetime={post.data.pubDate.toISOString()}>
+          {
+            new Date(post.data.pubDate).toLocaleDateString('uk-UA', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          }
+        </time>
+        <span>•</span>
+        <span>{Math.ceil(post.body.length / 200)} хвилин читання</span>
+      </div>
+    </header>
+
+    <!-- Featured Image -->
+    {
+      post.data.image && (
+        <div class="mb-12 overflow-hidden rounded-xl">
+          <img
+            src={post.data.image}
+            alt={post.data.title}
+            class="h-96 w-full object-cover"
+          />
+        </div>
+      )
+    }
+
+    <!-- Article Content -->
+    <div class="prose prose-2xl max-w-none text-slate-800 leading-relaxed">
+      <Content />
+    </div>
+
+    <!-- Author Section -->
+    <div class="mt-16 rounded-xl border border-slate-200 bg-slate-50 p-8">
+      <h3 class="font-bold text-slate-900">Про Цю Публікацію</h3>
+      <p class="mt-2 text-slate-600">
+        Цей аудит проведений командою Офісу НГА. Всі дані перевірені та задокументовані відповідно до наших стандартів якості.
+      </p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="mt-16 border-t border-slate-200 pt-8">
+      <div class="grid gap-8 sm:grid-cols-2">
+        {
+          prevPost && (
+            <a href={`/news/${prevPost.slug}`} class="group">
+              <div class="text-sm font-semibold text-slate-500">← Попередня</div>
+              <h4 class="mt-1 text-lg font-bold text-slate-900 group-hover:text-blue-600">
+                {prevPost.data.title}
+              </h4>
+            </a>
+          )
+        }
+        {
+          nextPost && (
+            <a href={`/news/${nextPost.slug}`} class="group text-right sm:text-left">
+              <div class="text-sm font-semibold text-slate-500">Наступна →</div>
+              <h4 class="mt-1 text-lg font-bold text-slate-900 group-hover:text-blue-600">
+                {nextPost.data.title}
+              </h4>
+            </a>
+          )
+        }
+      </div>
+    </nav>
+  </article>
+</Layout>
