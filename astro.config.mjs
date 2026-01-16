@@ -4,10 +4,9 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  site: 'https://example.com', // TODO: Update this to your custom domain (e.g. https://unga.org.ua)
+  site: 'https://prylypko.github.io',
+  base: '/ipao',
   integrations: [tailwind()],
-  // Uncomment below if deploying to a subdirectory on GitHub Pages
-  // base: '/ipao',
   vite: {
     ssr: {
       external: ['svgo'],

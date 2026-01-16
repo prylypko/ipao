@@ -85,7 +85,7 @@ const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1]
       <div class="grid gap-8 sm:grid-cols-2">
         {
           prevPost && (
-            <a href={`/news/${prevPost.slug}`} class="group">
+            <a href={`/ipao/news/${prevPost.slug}`} class="group">
               <div class="text-sm font-semibold text-slate-500">← Попередня</div>
               <h4 class="mt-1 text-lg font-bold text-slate-900 group-hover:text-blue-600">
                 {prevPost.data.title}
@@ -95,7 +95,7 @@ const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1]
         }
         {
           nextPost && (
-            <a href={`/news/${nextPost.slug}`} class="group text-right sm:text-left">
+            <a href={`/ipao/news/${nextPost.slug}`} class="group text-right sm:text-left">
               <div class="text-sm font-semibold text-slate-500">Наступна →</div>
               <h4 class="mt-1 text-lg font-bold text-slate-900 group-hover:text-blue-600">
                 {nextPost.data.title}
