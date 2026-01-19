@@ -4,8 +4,8 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  site: 'https://prylypko.github.io',
-  base: '/ipao',
+  site: 'https://ipao.com.ua',
+  base: '/',
   integrations: [tailwind()],
   vite: {
     ssr: {
