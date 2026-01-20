@@ -24,6 +24,26 @@ const { title = 'Офіс НГА - Офіс Незалежного Громад�
     />
   </head>
   <body class="bg-white text-gray-900">
+    <div id="fb-root"></div>
+    <script is:inline>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId            : 'your-app-id', // Optional: Add App ID here if you have one
+          autoLogAppEvents : true,
+          xfbml            : true,
+          version          : 'v21.0'
+        });
+        console.log('Facebook SDK Initialized');
+      };
+    </script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/uk_UA/sdk.js"></script>
+    <script is:inline>
+      document.addEventListener('astro:after-swap', () => {
+        if (typeof FB !== 'undefined') {
+          FB.XFBML.parse();
+        }
+      });
+    </script>
     <header class="border-b border-gray-200 bg-white">
       <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col sm:flex-row items-center justify-between py-4 gap-4">
