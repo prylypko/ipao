@@ -85,7 +85,7 @@ const prevPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1]
       <h3 class="text-xl font-bold text-slate-900 mb-6 font-primary">Коментарі</h3>
       <div 
         class="fb-comments" 
-        data-href={`https://ipao.com.ua/news/${post.slug}`} 
+        data-href={Astro.url.href}
         data-width="100%" 
         data-numposts="10"
       ></div>
