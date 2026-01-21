@@ -113,11 +113,11 @@ const posts = (await getCollection('news'))
             </div>
           </div>
         </div>
-        <div class="flex justify-center rounded-lg border border-gray-200 bg-gray-50 p-4 overflow-hidden">
-          <div class="w-full max-w-[500px] flex justify-center">
+        <div class="flex justify-center rounded-xl border border-gray-100 bg-white p-4 shadow-sm overflow-hidden min-h-[400px]">
+          <div class="w-full max-w-[500px]">
             <div class="fb-page" 
               data-href="https://www.facebook.com/IPAOua" 
-              data-tabs=""
+              data-tabs="timeline"
               data-width="500" 
               data-height=""
               data-small-header="false" 
@@ -132,6 +132,49 @@ const posts = (await getCollection('news'))
         </div>
       </div>
     </div>
+    <script>
+      const updateFacebookPluginWidth = () => {
+        const fbPage = document.querySelector('.fb-page');
+        const container = fbPage?.parentElement;
+        
+        if (fbPage && container) {
+          // Get parent width - container is the w-full max-w-[500px] div
+          const containerWidth = container.offsetWidth;
+          
+          if (containerWidth === 0) return;
+
+          // FB Plugin min is 180, max is 500.
+          // We want it to fill the container up to 500.
+          const newWidth = Math.min(Math.max(containerWidth, 180), 500);
+          
+          const currentWidth = fbPage.getAttribute('data-width');
+          
+          // Only update and re-parse if width is significantly different (to avoid jitter)
+          if (currentWidth !== Math.floor(newWidth).toString()) {
+            fbPage.setAttribute('data-width', Math.floor(newWidth).toString());
+            if (window.FB) {
+              // Re-parse the container to force layout refresh
+              FB.XFBML.parse(container);
+            }
+          }
+        }
+      };
+
+      let timeout;
+      const handleResize = () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(updateFacebookPluginWidth, 500);
+      };
+
+      window.addEventListener('resize', handleResize);
+      // Run on various load events to ensure it catches the layout
+      window.addEventListener('load', updateFacebookPluginWidth);
+      document.addEventListener('astro:page-load', updateFacebookPluginWidth);
+      
+      // Try multiple times to catch delayed layout
+      setTimeout(updateFacebookPluginWidth, 500);
+      setTimeout(updateFacebookPluginWidth, 2000);
+    </script>
   </section>
 
   <!-- CTA Section -->
